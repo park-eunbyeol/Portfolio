@@ -3,6 +3,7 @@
 @theme {
   --color-brand-primary: #8b5cf6;
   --color-brand-secondary: #ec4899;
+  --color-accent: #06b6d4;
   --color-surface: #121212;
   --color-glass: rgba(255, 255, 255, 0.08);
   --color-glass-border: rgba(255, 255, 255, 0.1);
@@ -22,15 +23,43 @@ body {
   color: var(--foreground);
   font-family: inherit;
   overflow-x: hidden;
+  cursor: default;
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.5);
+}
+
+/* Glass Card */
 .glass-card {
   background: var(--color-glass);
   backdrop-filter: blur(12px);
   border: 1px solid var(--color-glass-border);
   border-radius: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(139, 92, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Gradient Text */
 .gradient-text {
   background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-secondary));
   -webkit-background-clip: text;
@@ -38,7 +67,172 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
+/* Grid Background */
 .bg-grid {
   background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
   background-size: 40px 40px;
+}
+
+/* Gradient Mesh Background */
+.bg-mesh {
+  background: 
+    radial-gradient(at 27% 37%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+    radial-gradient(at 97% 21%, rgba(236, 72, 153, 0.15) 0px, transparent 50%),
+    radial-gradient(at 52% 99%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
+    radial-gradient(at 97% 96%, rgba(236, 72, 153, 0.1) 0px, transparent 50%);
+}
+
+/* Bento Grid Utilities */
+.bento-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@media (min-width: 768px) {
+  .bento-grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 300px;
+  }
+}
+
+.bento-sm {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.bento-md {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.bento-lg {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.bento-tall {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+
+.bento-wide {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+/* 3D Card Transform */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-3d:hover {
+  transform: rotateX(2deg) rotateY(2deg) scale(1.02);
+}
+
+/* Magnetic Button Effect */
+.magnetic-btn {
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.magnetic-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Smooth Fade In Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* Ripple Effect */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  width: 20px;
+  height: 20px;
+  animation: ripple 0.6s ease-out;
+  pointer-events: none;
+}
+
+/* Bold Typography Scale */
+.text-display {
+  font-size: clamp(3rem, 8vw, 8rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.text-hero {
+  font-size: clamp(2rem, 5vw, 5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* Interactive Hover Glow */
+.hover-glow {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.hover-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-secondary));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  filter: blur(20px);
+}
+
+.hover-glow:hover::before {
+  opacity: 0.5;
+}
+
+/* Image Zoom on Hover */
+.image-zoom {
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.image-zoom img {
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.image-zoom:hover img {
+  transform: scale(1.1);
+}
+
+/* Selection Style */
+::selection {
+  background: rgba(139, 92, 246, 0.3);
+  color: white;
 }

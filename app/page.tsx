@@ -16,7 +16,10 @@ import {
   MapPin,
   ChevronDown,
   Menu,
-  X
+  X,
+  Palette,
+  PenTool,
+  TrendingUp
 } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -39,10 +42,9 @@ const Navbar = () => {
 
   const navItems = [
     { name: "About", id: "about" },
-    { name: "Projects", id: "projects" },
-    { name: "Skills", id: "skills" },
     { name: "Experience", id: "experience" },
-    { name: "Education", id: "education" },
+    { name: "Work", id: "projects" },
+    { name: "Contact", id: "contact" },
   ];
 
   return (
@@ -60,7 +62,7 @@ const Navbar = () => {
         </motion.div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex gap-8">
+        <div className="hidden xl:flex gap-8">
           {navItems.map((item, i) => (
             <motion.a
               key={item.id}
@@ -76,7 +78,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden">
+        <div className="xl:hidden">
           <button onClick={() => setIsOpen(!isOpen)} className="text-white">
             {isOpen ? <X /> : <Menu />}
           </button>
@@ -90,7 +92,7 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-black/90 border-t border-white/10 overflow-hidden"
+            className="xl:hidden bg-black/90 border-t border-white/10 overflow-hidden"
           >
             <div className="flex flex-col p-6 gap-4">
               {navItems.map((item) => (
@@ -111,13 +113,14 @@ const Navbar = () => {
   );
 };
 
-const SectionTitle = ({ children, subtitle }: { children: React.ReactNode, subtitle?: string }) => (
-  <div className="mb-12">
+const SectionTitle = ({ children, subtitle, align = 'left' }: { children: React.ReactNode, subtitle?: string, align?: 'left' | 'center' }) => (
+  <div className={cn("mb-12", align === 'center' && "text-center")}>
     <motion.h2
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="text-4xl md:text-5xl font-bold mb-4 tracking-tight"
+      className="text-6xl xl:text-8xl font-black mb-6 tracking-tighter"
+      style={{ fontFamily: 'var(--font-space-grotesk)' }}
     >
       {children}
     </motion.h2>
@@ -127,7 +130,7 @@ const SectionTitle = ({ children, subtitle }: { children: React.ReactNode, subti
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.1 }}
-        className="text-white/80 text-xl font-medium"
+        className="text-white/60 text-2xl xl:text-3xl font-medium leading-relaxed"
       >
         {subtitle}
       </motion.p>
@@ -143,42 +146,48 @@ const Card = ({ children, className }: { children: React.ReactNode, className?: 
 
 // --- Constants ---
 
-const PROJECTS = [
+const projects = [
   {
-    title: "movie-react",
-    period: "2025.11.12 - 2025.12.05",
-    motivation: "한정적인 영화 검색 기능과 데이터 부재 문제를 해결하기 위한 광범위한 DB 구축",
-    goal: "비동기 데이터 바인딩과 컴포넌트화를 통한 안정적인 영화 추천 서비스 구축",
-    role: "핵심 기능 개발 (REST API 비동기 연동, 검색 및 필터링 시스템, UI 컴포넌트 설계)",
-    description: "TMDB REST API를 활용한 비동기 데이터 통신을 구현하고, 원자 단위의 재사용 가능한 컴포넌트 구조로 UI를 설계하여 유지보수성을 높였습니다. 전체 빌드 및 Netlify 배포 프로세스를 직접 수행하며 완성도 높은 웹 서비스를 경험했습니다.",
-    tech: ["React", "JavaScript", "CSS", "TMDB API", "Git", "Figma", "Netlify"],
+    title: "MovieFlix",
+    period: "2025.11.14 - 2025.12.05",
+    overview: "TMDB REST API 기반의 영화 큐레이션 서비스 디자인 및 개발. 비주얼 임팩트와 가독성을 고려한 인터페이스 설계.",
+    programs: "React, Naver API, CSS, Figma",
+    contents: "메인페이지, 검색 시스템, 상세 정보 모달",
+    contribution: "100% (1인 프로젝트)",
+    description: "사용자의 검색 경험을 최우선으로 고려하여 미니멀한 UI를 설계했습니다. 비동기 데이터 통신을 통한 끊김 없는 사용자 경험과 시각적 계층 구조(Visual Hierarchy)를 강조한 레이아웃이 특징입니다.",
+    tech: ["React", "Naver API", "Figma", "Photoshop"],
     github: "https://github.com/park-eunbyeol/movie-react",
     link: "https://unique-maamoul-7b66f6.netlify.app",
-    image: <img src="/movie-react.png" alt="movie-react" className="w-full h-full object-top shadow-2xl border border-white/5" />
+    image: <img src="/movie-react.png" alt="movie-react" className="w-full h-full object-cover object-left-top shadow-2xl" />,
+    color: "from-violet-600/20 to-transparent"
   },
   {
-    title: "카페드림",
+    title: "카페드림 (Cafe Dream)",
     period: "2026.01.06 - 2026.01.28",
-    motivation: "개별 카페 홍보 서비스는 많으나, 카페 운영진(사장님)을 위한 전문적인 마케팅 랜딩 페이지의 부재 해결",
-    goal: "사장님들의 비즈니스 성장을 돕는 맞춤형 마케팅 솔루션 제안 및 직관적인 웹 인터페이스 구축",
-    role: "프로젝트 기획 및 마케팅 특화 웹 UI/UX 설계, 분석 대시보드 개발",
-    description: "기존의 홍보 위주 페이지에서 벗어나, 카페 사장님의 관점에서 실질적으로 필요한 마케팅 도구와 비즈니스 분석 기능을 담은 플랫폼을 기획했습니다. 사장님이 비즈니스 현황을 한눈에 파악하고 전략을 세울 수 있도록 사용자 중심의 데이터 시각화와 인터렉티브한 UI를 구현했습니다.",
-    tech: ["React", "Next.js", "CSS", "TypeScript", "Supabase", "Figma", "GitHub", "Vercel"],
-    github: "https://github.com",
-    link: "https://demo.com",
-    image: <img src="/cafe-dream.png" alt="카페드림" className="w-full h-full object-top shadow-2xl border border-white/5" />
+    overview: "카페 운영의 복잡함을 미니멀리즘으로 해석한 AI 관리 솔루션. 데이터 가독성을 극대화한 프리미엄 대시보드 설계.",
+    programs: "Next.js, Naver API, Tailwind CSS, Figma",
+    contents: "대시보드 UI, AI 분석 리포트, 반응형 웹",
+    contribution: "100%, 1인 프로젝트",
+    description: "AI가 제공하는 방대한 데이터를 정보의 우선순위에 따라 배치하여, 복잡한 비즈니스 지표를 한눈에 읽을 수 있는 직관적인 대시보드 경험을 선사합니다. 사장님의 시각적 피로도를 고려한 고감도 다크 모드 레이아웃을 구현했습니다.",
+    tech: ["Next.js", "Naver API", "Figma", "Photoshop"],
+    github: "https://github.com/park-eunbyeol/my-app",
+    link: "https://my-app-omega-fawn-50.vercel.app/",
+    image: <img src="/cafe-dream-final.png" alt="카페드림" className="w-full h-full object-cover object-top shadow-2xl" />,
+    color: "from-amber-600/20 to-transparent"
   },
   {
-    title: "HOMEDECO SHOP",
-    period: "2023.09 - 2023.10",
-    motivation: "기존 인테리어 쇼핑몰의 복잡한 결제 단계를 직관적으로 개선하여 구매 경험 고도화",
-    goal: "사용자 이탈률 최소화를 위한 심리스(Seamless)한 커머스 경험 설계",
-    role: "UI/UX 최적화 및 복잡한 장바구니 로직 상태 관리 설계",
-    description: "사용자 여정 중 발생하는 작은 마찰 지점까지 끝까지 추적하고 개선하여 구매 완료 플로우를 최적화했습니다.",
-    tech: ["Next.js", "Tailwind", "Prisma"],
-    github: "https://github.com",
-    link: "https://demo.com",
-    image: <Layers className="text-white/20" size={48} />
+    title: "COZY-DECO",
+    period: "2024.01 - 2024.02",
+    overview: "'가장 프라이빗한 휴식'을 테마로 한 감성 인테리어 커머스 디자인. 사용자의 공간에 포근함을 더하는 프리미엄 쇼핑 경험 제공.",
+    programs: "PHP, MySQL, Figma, Photoshop, Illustrator",
+    contents: "자동 슬라이드 히어로 섹션(직접 기획/구현), AI 상품 추천 시스템, 심리스 커스텀 주문서",
+    contribution: "100%, 1인 프로젝트",
+    description: "직접 기획하고 구현한 '자동 슬라이드 히어로 섹션'을 통해 브랜드의 핵심 비주얼을 역동적으로 전달합니다. 인테리어 브랜드 특유의 정온한 분위기 위해 고감도 화이트 스페이스와 Serif 타이포그래피를 조화롭게 배치했으며, 가입 없이도 장바구니 이용이 가능한 사용자 중심의 커머스 플로우를 설계했습니다.",
+    tech: ["PHP", "MySQL", "Figma", "Photoshop"],
+    github: "https://github.com/park-eunbyeol/homedeco-shop",
+    link: "https://ghjrodf.dothome.co.kr/homedeco-shop/index.php",
+    image: <img src="/cozy-deco.png" alt="COZY-DECO" className="w-full h-full object-cover object-top shadow-2xl" />,
+    color: "from-stone-500/20 to-transparent"
   }
 ];
 
@@ -192,14 +201,40 @@ export default function Home() {
     subject: "",
     message: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Create mailto link with form data
-    const mailtoLink = `mailto:ap9450150918@gmail.com?subject=${encodeURIComponent(emailForm.subject)}&body=${encodeURIComponent(`From: ${emailForm.name} (${emailForm.email})\n\n${emailForm.message}`)}`;
-    window.location.href = mailtoLink;
-    setIsEmailModalOpen(false);
-    setEmailForm({ name: "", email: "", subject: "", message: "" });
+    setIsSubmitting(true);
+    setSubmissionStatus('idle');
+
+    try {
+      const response = await fetch('/api/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailForm),
+      });
+
+      if (response.ok) {
+        setSubmissionStatus('success');
+        setEmailForm({ name: "", email: "", subject: "", message: "" });
+        // Close modal after success after a delay
+        setTimeout(() => {
+          setIsEmailModalOpen(false);
+          setSubmissionStatus('idle');
+        }, 2000);
+      } else {
+        setSubmissionStatus('error');
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      setSubmissionStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -208,252 +243,496 @@ export default function Home() {
 
       <main>
         {/* 1. Introduce (Hero) Section */}
-        <section id="about" className="relative min-h-[90vh] flex items-center pt-20 overflow-hidden">
-          <div className="absolute top-1/4 -left-20 w-96 h-96 bg-violet-600/20 rounded-full blur-[120px]" />
-          <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-pink-600/20 rounded-full blur-[120px]" />
+        <section id="home" className="relative min-h-[90vh] flex items-center pt-20 overflow-hidden">
+          <div className="container mx-auto px-6 relative z-10 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="inline-block px-6 py-2 rounded-full border border-violet-500/30 bg-violet-500/5 text-violet-400 text-base font-bold mb-8 flex items-center gap-2 justify-center mx-auto w-fit"
+            >
+              <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse" />
+              Web Designer
+            </motion.div>
 
-          <div className="container mx-auto px-6 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-              {/* Text Content */}
-              <div className="lg:col-span-7 text-left">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="inline-block px-4 py-2 rounded-full border border-white/10 bg-white/5 text-violet-400 text-sm font-medium mb-8"
-                >
-                  Available for New Projects
-                </motion.div>
-
-                <motion.h1
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-5xl md:text-7xl font-black mb-8 leading-[1.1] text-white break-keep"
-                >
-                  가치있는 코드에 <br />
-                  <span className="gradient-text">탁월한 경험을 담다.</span>
-                </motion.h1>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                  className="max-w-2xl text-xl text-white/80 mb-8 leading-relaxed break-keep font-medium"
-                >
-                  어려운 기술적 과제도 <span className="text-white font-bold underline underline-offset-4 decoration-violet-500">집요하게 파고들어 완성하는</span> 프론트엔드 개발자입니다. 포기하지 않는 끈기로 비즈니스의 복잡한 문제를 해결하고, 최고의 사용자 경험을 구현합니다.
-                </motion.p>
-
-                {/* Quick Info Grid */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.5 }}
-                  className="grid grid-cols-2 gap-6 mb-12 border-l-2 border-violet-500/30 pl-6"
-                >
-                  {[
-                    { label: "Name", value: "박은별", icon: <User size={18} /> },
-                    { label: "Role", value: "Frontend Architect", icon: <Code size={18} /> },
-                    { label: "Location", value: "Daegu, South Korea", icon: <MapPin size={18} /> },
-                    { label: "Contact", value: "ap9450150918@gmail.com", icon: <Mail size={18} /> },
-                  ].map((info, i) => (
-                    <div key={i} className="flex flex-col gap-1">
-                      <span className="text-xs uppercase tracking-widest text-violet-400 font-black flex items-center gap-2">
-                        {info.icon} {info.label}
-                      </span>
-                      <p className="text-lg font-bold text-white leading-none">{info.value}</p>
-                    </div>
-                  ))}
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.6 }}
-                  className="flex flex-wrap gap-4"
-                >
-                  <a href="#projects" className="px-8 py-4 rounded-full bg-white text-black font-bold hover:bg-white/90 transition-all">
-                    View Projects
-                  </a>
-                  <a href="/about" className="px-8 py-4 rounded-full border border-white/10 bg-white/5 font-bold hover:bg-white/10 transition-all">
-                    자기소개
-                  </a>
-                  <a href="#contact" className="px-8 py-4 rounded-full border border-white/10 bg-white/5 font-bold hover:bg-white/10 transition-all">
-                    Contact Me
-                  </a>
-                </motion.div>
-              </div>
-
-              {/* Profile Image Column */}
-              <div className="lg:col-span-5 flex justify-center lg:justify-end">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                  transition={{ duration: 1, delay: 0.3 }}
-                  className="relative group"
-                >
-                  {/* Decorative Frames */}
-                  <div className="absolute -inset-4 bg-gradient-to-tr from-violet-600/20 to-pink-600/20 rounded-[40px] blur-xl opacity-50 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute -inset-0.5 bg-gradient-to-tr from-violet-600 to-pink-600 rounded-[32px] opacity-20 group-hover:opacity-40 transition-opacity" />
-
-                  {/* Image Container */}
-                  <div className="relative w-72 h-96 md:w-80 md:h-[420px] bg-zinc-900 rounded-[30px] overflow-hidden border border-white/10 glass-card">
-                    {/* Profile Character Image */}
-                    <img
-                      src="/profile-character.png"
-                      alt="Developer Profile"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8">
-                      <p className="text-white font-bold text-xl mb-1">Developer</p>
-                      <p className="text-white/50 text-sm italic">"Focus on user experience"</p>
-                    </div>
-                  </div>
-
-                  {/* Floating Tech Badges or Elements */}
-                  <motion.div
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                    className="absolute -top-6 -right-6 p-4 glass-card border-violet-500/30"
-                  >
-                    <div className="w-12 h-12 bg-violet-600/20 rounded-full flex items-center justify-center">
-                      <Code className="text-violet-400" size={24} />
-                    </div>
-                  </motion.div>
-                </motion.div>
-              </div>
-            </div>
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-8xl xl:text-9xl font-black mb-12 tracking-tighter"
+              style={{ fontFamily: 'var(--font-space-grotesk)' }}
+            >
+              PORTFOLIO<span className="gradient-text">.</span>
+            </motion.h1>
 
             <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="mt-20 flex flex-col items-center gap-2 text-white/30"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="flex flex-wrap gap-4 justify-center"
             >
-              <span className="text-xs uppercase tracking-widest">Scroll Down</span>
-              <ChevronDown size={20} />
+              <a
+                href="#projects"
+                className="px-10 py-5 rounded-full bg-white text-black font-black hover:bg-white/90 transition-all text-lg"
+              >
+                View Work
+              </a>
+              <a
+                href="#contact"
+                className="px-10 py-5 rounded-full border border-white/20 bg-white/5 font-black hover:bg-white/10 transition-all text-lg"
+              >
+                Contact Me
+              </a>
             </motion.div>
           </div>
-        </section >
+        </section>
 
-        {/* 2. Key Projects Section */}
-        < section id="projects" className="py-32 container mx-auto px-6" >
-          <SectionTitle subtitle="선별된 주요 프로젝트 성과">Featured Works</SectionTitle>
+        {/* 1.5. About Me Section (Consolidated) */}
+        <section id="about" className="py-32 container mx-auto px-6">
+          <SectionTitle align="center" subtitle="웹 디자이너 박은별을 소개합니다">About Me</SectionTitle>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {PROJECTS.map((project, index) => (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="group cursor-pointer hover:shadow-2xl hover:shadow-violet-600/20 transition-all duration-500 border-white/5 hover:border-violet-500/50 p-7">
-                  <div className="relative h-64 mb-8 overflow-hidden rounded-2xl bg-black/40 border border-white/10 shadow-inner">
-                    <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105">
-                      {project.image}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="p-8 xl:p-12"
+          >
+            <div className="grid xl:grid-cols-2 gap-12">
+              {/* Left Side - Profile */}
+              <div className="flex flex-col items-center xl:items-start text-center xl:text-left">
+                <div className="w-40 h-40 rounded-full bg-gradient-to-br from-violet-600/20 to-pink-600/20 flex items-center justify-center mb-8 overflow-hidden border-2 border-white/10 shadow-2xl">
+                  <img src="/profile-character.png" alt="Profile Character" className="w-full h-full object-cover scale-110" />
+                </div>
+                <h3 className="text-4xl font-bold mb-2" style={{ fontFamily: 'var(--font-space-grotesk)' }}>
+                  park eunbyeol<span className="gradient-text">.</span>
+                </h3>
+                <p className="text-xl text-violet-400 font-bold mb-6">Web Designer</p>
+                <p className="text-white/70 leading-relaxed mb-8 max-w-md">
+                  사용자 중심의 가치를 시각적으로 구현하는 웹 디자이너 박은별입니다.
+                  심플하면서도 힘 있는 디자인을 통해 브랜드의 이야기를 전달합니다.
+                </p>
+
+                <div className="flex gap-4">
+                  <a href="mailto:ap9450150918@gmail.com" className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-violet-400">
+                    <Mail size={20} />
+                  </a>
+                  <a href="https://github.com/park-eunbyeol" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-violet-400">
+                    <Github size={20} />
+                  </a>
+                </div>
+              </div>
+
+              {/* Right Side - Details & Skills */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+                {/* Education Section */}
+                <div>
+                  <h4 className="text-3xl xl:text-4xl font-black mb-6 gradient-text tracking-tighter" style={{ fontFamily: 'var(--font-space-grotesk)' }}>
+                    Education
+                  </h4>
+                  <div className="space-y-6">
+                    <div>
+                      <p className="text-white font-black text-xl xl:text-2xl mb-1">대구보건고등학교</p>
+                      <p className="text-white/50 text-base xl:text-lg">스마트경영학과 졸업</p>
+                    </div>
+                    <div>
+                      <p className="text-white font-black text-xl xl:text-2xl mb-1">영진직업전문학교</p>
+                      <p className="text-white/50 text-base xl:text-lg leading-relaxed">UX/UI 웹 & 앱 디자인 양성 과정</p>
                     </div>
                   </div>
-                  <h3 className="text-3xl font-black mb-6 group-hover:text-violet-400 transition-colors text-white tracking-tight">
-                    {project.title}
-                  </h3>
+                </div>
 
-                  <div className="space-y-2 mb-6 text-sm break-keep">
-                    <div className="flex gap-2 text-violet-400">
-                      <span className="font-semibold min-w-[70px]">Why:</span>
-                      <span className="text-white/70 italic text-xs leading-relaxed">{project.motivation}</span>
-                    </div>
-                    <div className="flex gap-4">
-                      <span className="text-violet-400 font-black min-w-[80px] uppercase text-[11px] tracking-widest mt-1">Goal</span>
-                      <span className="text-white font-medium">{project.goal}</span>
-                    </div>
-                    <div className="flex gap-4">
-                      <span className="text-violet-400 font-black min-w-[80px] uppercase text-[11px] tracking-widest mt-1">Role</span>
-                      <span className="text-white font-medium">{project.role}</span>
-                    </div>
-                    <div className="flex gap-4">
-                      <span className="text-violet-400 font-black min-w-[80px] uppercase text-[11px] tracking-widest mt-1">Period</span>
-                      <span className="text-white/60 font-mono text-sm">{project.period}</span>
-                    </div>
-                  </div>
-
-                  <p className="text-white/80 mb-10 text-[15px] leading-loose break-keep border-t border-white/10 pt-8 font-light">
-                    {project.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2">
-                    {project.tech.map(t => (
-                      <span key={t} className="text-[10px] px-2 py-1 rounded-full border border-white/10 bg-white/5 uppercase tracking-wider">
-                        {t}
-                      </span>
+                {/* Skills Section */}
+                <div>
+                  <h4 className="text-3xl xl:text-4xl font-black mb-6 gradient-text tracking-tighter" style={{ fontFamily: 'var(--font-space-grotesk)' }}>
+                    Used Tools
+                  </h4>
+                  <div className="space-y-4">
+                    {[
+                      { skill: "Figma", level: 85 },
+                      { skill: "Photoshop", level: 55 },
+                      { skill: "Illustrator", level: 55 },
+                      { skill: "HTML, CSS, JS", level: 90 },
+                    ].map((item, i) => (
+                      <div key={item.skill}>
+                        <div className="flex justify-between mb-1.5">
+                          <span className="text-sm font-bold uppercase tracking-wider">{item.skill}</span>
+                          <span className="text-xs text-violet-400 font-bold">{item.level}%</span>
+                        </div>
+                        <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${item.level}%` }}
+                            transition={{ duration: 1, delay: i * 0.1 }}
+                            className="h-full bg-gradient-to-r from-violet-500 to-pink-500"
+                          />
+                        </div>
+                      </div>
                     ))}
                   </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </section>
 
-                  <div className="mt-8 flex justify-between items-center border-t border-white/20 pt-6">
-                    <div className="flex gap-5">
-                      <a href={project.github} target="_blank" rel="noopener noreferrer">
-                        <Github size={22} className="text-white/60 hover:text-violet-400 transition-colors" />
-                      </a>
-                      <a href={project.link} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink size={22} className="text-white/60 hover:text-violet-400 transition-colors" />
-                      </a>
-                    </div>
-                    <span className="text-[13px] font-black text-violet-400 hover:text-violet-300 transition-colors cursor-pointer uppercase tracking-wider">
-                      View Project →
-                    </span>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </section >
-
-        {/* 3. Tech Stack Section */}
-        < section id="skills" className="py-32 bg-white/[0.02]" >
+        {/* 2. Professional Journey Section */}
+        <section id="experience" className="py-24 bg-white/[0.01] border-b border-white/5">
           <div className="container mx-auto px-6">
-            <SectionTitle subtitle="보유 기술 및 숙련도">Tech Spectrum</SectionTitle>
+            <SectionTitle align="center" subtitle="사회적 경험의 뿌리">Professional Journey</SectionTitle>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {[
-                { name: "React", level: "Advanced", icon: <Code /> },
-                { name: "JavaScript", level: "Expert", icon: <Code /> },
-                { name: "CSS", level: "Expert", icon: <Layers /> },
-                { name: "API Integration", level: "Advanced", icon: <Layers /> },
-                { name: "Git / GitHub", level: "Expert", icon: <Code /> },
-                { name: "Figma", level: "Advanced", icon: <Code /> },
-                { name: "Netlify", level: "Intermediate", icon: <Layers /> },
-                { name: "Vercel", level: "Advanced", icon: <Layers /> },
-                { name: "Responsive Design", level: "Advanced", icon: <Layers /> },
-              ].map((skill, i) => (
+            <div className="max-w-4xl mx-auto mt-20">
+              {/* Intro Text - Centered on Top */}
+              <div className="text-center mb-24">
+                <p className="text-white/60 text-xl xl:text-2xl leading-relaxed break-keep max-w-2xl mx-auto">
+                  재무회계 분야에서의 실무 경험은 저에게 <br className="hidden md:block" />
+                  디자인의 화려함 뒤에 숨겨진 **'논리적인 구조'**와 <br className="hidden md:block" />
+                  **'정교한 디테일'**의 중요성을 가르쳐주었습니다.
+                </p>
+              </div>
+
+              {/* Timeline Items - Zig-zag Layout on Desktop */}
+              <div className="relative space-y-24 xl:space-y-0">
+                {/* Central Vertical Line (Desktop only) */}
+                <div className="hidden xl:block absolute left-1/2 top-0 bottom-0 w-px bg-white/5 -translate-x-1/2" />
+                {/* 2. Plaza Pharmacy - Right Aligned on Desktop */}
+                <div className="relative flex flex-col xl:flex-row xl:justify-start items-center group">
+                  <div className="hidden xl:block absolute left-1/2 top-0 w-4 h-4 rounded-full bg-violet-500 -translate-x-1/2 shadow-[0_0_15px_rgba(139,92,246,0.5)] z-10 group-hover:scale-150 transition-transform" />
+
+                  <motion.div
+                    initial={{ opacity: 0, x: -50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    className="xl:w-1/2 xl:pr-20 xl:text-right w-full pl-12 xl:pl-0 relative pb-12 xl:pb-0"
+                  >
+                    {/* Mobile Timeline Line & Dot */}
+                    <div className="xl:hidden absolute left-0 top-0 bottom-0 w-px bg-white/10" />
+                    <div className="xl:hidden absolute left-[-5px] top-0 w-[10px] h-[10px] rounded-full bg-violet-500" />
+                    <div className="flex flex-col xl:items-end gap-6 pb-2">
+                      <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono tracking-widest text-violet-400">
+                        2023.01 — 2023.11
+                      </span>
+                      <h4 className="text-4xl xl:text-5xl font-black tracking-tighter italic">프라자약국 (Plaza Pharmacy)</h4>
+                      <p className="text-2xl font-bold text-white/90">전산 및 조제 보조</p>
+                    </div>
+
+                    <div className="mt-8 flex flex-col xl:items-end">
+                      <ul className="space-y-4 max-w-xl">
+                        {[
+                          "고객 요청 사항을 정리하고 우선순위를 판단하여 업무를 처리",
+                          "반복되는 업무 흐름을 정리하며 효율적인 업무 방식에 익숙",
+                          "다양한 상황에서 정확성과 책임감을 요구받는 환경에서 근무"
+                        ].map((item, i) => (
+                          <li key={i} className="flex items-start xl:flex-row-reverse gap-5 text-white/50 text-lg leading-relaxed text-left xl:text-right">
+                            <div className="mt-3 w-1.5 h-1.5 rounded-full bg-violet-400/30 shrink-0" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* Vertical Spacer for Desktop */}
+                <div className="hidden xl:block h-32" />
+
+                {/* 1. Hotel Laonjena - Left Aligned on Desktop */}
+                <div className="relative flex flex-col xl:flex-row xl:justify-end items-center group">
+                  <div className="hidden xl:block absolute left-1/2 top-0 w-4 h-4 rounded-full bg-white/10 -translate-x-1/2 z-10 group-hover:bg-violet-500 group-hover:scale-150 transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)]" />
+
+                  <motion.div
+                    initial={{ opacity: 0, x: 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    className="xl:w-1/2 xl:pl-20 w-full pl-12 relative opacity-40 group-hover:opacity-100 transition-all duration-500"
+                  >
+                    {/* Mobile Timeline Line & Dot */}
+                    <div className="xl:hidden absolute left-0 top-0 bottom-0 w-px bg-white/10" />
+                    <div className="xl:hidden absolute left-[-5px] top-0 w-[10px] h-[10px] rounded-full bg-white/20 group-hover:bg-violet-500" />
+                    <div className="flex flex-col items-start gap-6 pb-2">
+                      <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono tracking-widest text-white/30 group-hover:text-violet-400 transition-colors">
+                        2021.09 — 2022.12
+                      </span>
+                      <h4 className="text-4xl xl:text-5xl font-black tracking-tighter italic">호텔라온제나 (Hotel Laonjena)</h4>
+                      <p className="text-2xl font-bold text-white/90">경영기획팀 · 재무회계</p>
+                    </div>
+
+                    <div className="mt-8">
+                      <ul className="space-y-4 max-w-xl">
+                        {[
+                          "매출 및 비용 데이터 정리·검증 업무 수행",
+                          "정해진 기준에 따라 데이터 정확성을 유지하며 업무 처리",
+                          "반복 업무 프로세스를 이해하고 효율적인 처리 방식에 익숙",
+                          "타 부서와의 협업을 통해 정산 관련 이슈 대응"
+                        ].map((item, i) => (
+                          <li key={i} className="flex items-start gap-5 text-white/50 text-lg leading-relaxed">
+                            <div className="mt-3 w-1.5 h-1.5 rounded-full bg-violet-400/30 shrink-0" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 2.5 Evolution of Craft (Growth Story) Section */}
+        <section className="py-24 bg-white/[0.01] border-y border-white/5 overflow-hidden">
+          <div className="container mx-auto px-6">
+            <div className="flex flex-col xl:flex-row items-center justify-between gap-12">
+              <div className="max-w-xl">
                 <motion.div
-                  key={skill.name}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
                 >
-                  <Card className="flex items-center gap-4 py-6">
-                    <div className="p-3 rounded-lg bg-violet-600/10 text-violet-400">
-                      {skill.icon}
-                    </div>
-                    <div>
-                      <h4 className="font-bold">{skill.name}</h4>
-                      <p className="text-xs text-white/40">{skill.level}</p>
-                    </div>
-                  </Card>
+                  <h3 className="text-3xl font-black mb-6 tracking-tighter">Evolution of Craft</h3>
+                  <p className="text-lg text-white/50 leading-relaxed break-keep">
+                    "2025년 10월, 처음 웹 제작을 시작했을 때는 단순히 예쁜 화면을 그리는 것에 만족했습니다. <br className="hidden md:block" />
+                    2026년 지금은 그 디자인이 비즈니스 문제를 어떻게 해결하고, <br className="hidden md:block" />
+                    사용자에게 어떤 경험적 가치를 줄 수 있는지 설계하는 즐거움을 배웁니다."
+                  </p>
+                  <div className="mt-8 flex items-center gap-4 text-xs font-mono tracking-widest uppercase opacity-30">
+                    <span>Oct 2025</span>
+                    <div className="h-px w-24 bg-gradient-to-r from-white to-transparent" />
+                    <span>Feb 2026</span>
+                  </div>
                 </motion.div>
-              ))}
+              </div>
+
+              <div className="flex flex-col md:flex-row gap-8 items-center xl:items-end">
+                {/* Before Card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="w-full md:w-64 space-y-4 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-700 group cursor-default"
+                >
+                  <div className="aspect-video rounded-2xl overflow-hidden border border-white/5 bg-black/40">
+                    <img src="/first-project.png" alt="First Project" className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black text-violet-400 uppercase tracking-widest mb-1">Archive 2025</p>
+                    <p className="text-sm font-bold opacity-80">BND Fanpage (Learning Stage)</p>
+                  </div>
+                </motion.div>
+
+                {/* Growth Icon */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                  className="hidden xl:block pb-12"
+                >
+                  <TrendingUp className="text-violet-500/40 w-10 h-10" />
+                </motion.div>
+
+                {/* Current Card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 }}
+                  className="w-full md:w-80 space-y-4 group cursor-default"
+                >
+                  <div className="aspect-[16/10] rounded-3xl overflow-hidden border border-violet-500/20 bg-black/40 shadow-2xl shadow-violet-500/10 transition-transform duration-500 group-hover:scale-[1.02]">
+                    <img src="/cafe-dream-final.png" alt="Current Project" className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black text-violet-400 uppercase tracking-widest mb-1">Selected 2026</p>
+                    <p className="text-sm font-bold">Premium Solution (Strategic Design)</p>
+                  </div>
+                </motion.div>
+              </div>
             </div>
           </div>
-        </section >
+        </section>
+
+        {/* 3. Selected Works Section */}
+        <section id="projects" className="py-32 container mx-auto px-6">
+          <SectionTitle align="center" subtitle="선택된 프로젝트들">Selected Works</SectionTitle>
+
+          <div className="space-y-40 mt-20">
+            {projects.map((project: any, index: number) => (
+              <motion.div
+                key={project.title}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8 }}
+                className={`flex flex-col xl:flex-row gap-12 xl:gap-24 items-start ${index % 2 === 1 ? 'xl:flex-row-reverse' : ''
+                  }`}
+              >
+                {/* Text Area */}
+                <div className="flex-1 space-y-10 group">
+                  <div>
+                    <span className="text-violet-400 font-bold tracking-widest uppercase text-sm mb-4 block">
+                      {project.period}
+                    </span>
+                    <h3 className="text-5xl xl:text-6xl font-black mb-4 tracking-tighter" style={{ fontFamily: 'var(--font-space-grotesk)' }}>
+                      {project.title}<span className="gradient-text">.</span>
+                    </h3>
+                  </div>
+
+                  <div className="space-y-8">
+                    <div className="flex flex-col gap-2">
+                      <span className="text-violet-400 font-black uppercase text-xs tracking-widest">Overview</span>
+                      <p className="text-white/60 text-lg leading-relaxed font-medium">
+                        {project.overview}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 border-t border-white/5">
+                      <div className="flex flex-col gap-2">
+                        <span className="text-violet-400 font-black uppercase text-xs tracking-widest">Used Programs</span>
+                        <p className="text-white/90 font-bold">{project.programs}</p>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <span className="text-violet-400 font-black uppercase text-xs tracking-widest">Contents</span>
+                        <p className="text-white/90 font-bold">{project.contents}</p>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <span className="text-violet-400 font-black uppercase text-xs tracking-widest">Contribution</span>
+                        <p className="text-white/90 font-bold">{project.contribution}</p>
+                      </div>
+                    </div>
+
+                    <div className="pt-8 space-y-6">
+                      <p className="text-white/80 leading-loose">
+                        {project.description}
+                      </p>
+                      <div className="flex gap-4">
+                        <a
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-8 py-3 rounded-full bg-white text-black font-black hover:bg-violet-400 hover:text-white transition-all text-sm"
+                        >
+                          Launch Site
+                        </a>
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-8 py-3 rounded-full border border-white/20 bg-white/5 font-black hover:bg-white/10 transition-all text-sm flex items-center gap-2"
+                        >
+                          <Github size={18} /> Source code
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Image Area */}
+                <div className="flex-1 w-full group relative">
+                  <div className={`absolute inset-0 bg-gradient-to-br ${project.color} blur-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-700`} />
+                  <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-black/40 backdrop-blur-xl aspect-[16/10] group-hover:border-violet-500/50 transition-colors duration-500 shadow-2xl flex flex-col">
+                    {/* Browser Mockup Header */}
+                    <div className="h-8 bg-white/5 border-b border-white/10 flex items-center gap-1.5 px-5 shrink-0">
+                      <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                    </div>
+                    <div className="relative flex-1 overflow-hidden transition-transform duration-1000 group-hover:scale-105">
+                      {project.image}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* 3. Design Capability (Creative Craft) Section */}
+        <section id="skills" className="py-32 bg-white/[0.02]">
+          <div className="container mx-auto px-6">
+            <SectionTitle subtitle="사용자의 마음을 움직이는 시각적 인터랙션의 힘">Design Capability</SectionTitle>
+
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-10 mt-20">
+
+              {/* Creative Tools */}
+              <div className="xl:col-span-4 space-y-6">
+                <h4 className="text-xs font-black text-violet-400 uppercase tracking-[0.4em] mb-10 opacity-70">Design Tools</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { name: "Figma", icon: <Layers size={16} /> },
+                    { name: "Photoshop", icon: <Palette size={16} /> },
+                    { name: "Illustrator", icon: <PenTool size={16} /> },
+                    { name: "After Effects", icon: <Layers size={16} /> },
+                  ].map((tool) => (
+                    <div key={tool.name} className="px-5 py-5 rounded-2xl bg-white/5 border border-white/5 flex flex-col gap-3 hover:bg-white/10 hover:border-violet-500/20 transition-all group">
+                      <span className="text-violet-400/60 group-hover:text-violet-400 group-hover:scale-110 transition-all">{tool.icon}</span>
+                      <span className="font-bold text-base">{tool.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Core Design & UX */}
+              <div className="xl:col-span-5 space-y-6">
+                <h4 className="text-xs font-black text-violet-400 uppercase tracking-[0.4em] mb-10 opacity-70">Creative Strategy</h4>
+                <div className="grid grid-cols-1 gap-3">
+                  {[
+                    { title: "UI/UX Visual System", desc: "사용자 경험을 최우선으로 고려한 시각적 위계 설계" },
+                    { title: "Typography & Layout", desc: "고감도 화이트 스페이스와 타이포그래피 정렬의 미학" },
+                    { title: "Brand Identity Design", desc: "브랜드의 본질을 관통하는 일관된 시각 언어 수립" }
+                  ].map((skill) => (
+                    <div key={skill.title} className="p-6 rounded-2xl border border-white/5 bg-gradient-to-br from-white/5 to-transparent hover:from-white/10 transition-all">
+                      <p className="font-bold text-lg mb-1">{skill.title}</p>
+                      <p className="text-sm text-white/40">{skill.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Interaction & Publishing */}
+              <div className="xl:col-span-3 space-y-6">
+                <h4 className="text-xs font-black text-violet-400 uppercase tracking-[0.4em] mb-10 opacity-70">Visual Interaction</h4>
+                <div className="space-y-8 pl-4 border-l border-white/5">
+                  {[
+                    { name: "Web Publishing", detail: "웹 표준을 넘어 인터랙션의 기초가 되는 정교한 구현" },
+                    { name: "Motion Interaction", detail: "사용자 몰입을 극대화하는 감각적인 애니메이션 시퀀스" },
+                    { name: "Visual Prototype", detail: "기획과 디자인이 살아 움직이는 고해상도 시뮬레이션" }
+                  ].map((item) => (
+                    <div key={item.name} className="relative group cursor-default">
+                      <div className="absolute -left-[17px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-violet-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <p className="font-black text-xl mb-1 group-hover:text-violet-400 transition-colors uppercase italic tracking-tighter">{item.name}</p>
+                      <p className="text-xs text-white/30 tracking-tight leading-relaxed">{item.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+
+            {/* Philosophy Line (The Decisive Blow) */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mt-24 text-center border-t border-white/5 pt-16 max-w-3xl mx-auto"
+            >
+              <p className="text-white/80 text-xl md:text-2xl font-bold mb-6 leading-tight break-keep tracking-tight">
+                "저는 디자인과 개발의 경계를 허무는 인터랙션을 통해,<br className="hidden md:block" /> 정적인 화면에 생명력을 불어넣는 즐거움을 느낍니다."
+              </p>
+              <p className="text-violet-400/30 font-mono text-xs tracking-[0.5em] uppercase">
+                Design that moves, interacts, and creates value.
+              </p>
+            </motion.div>
+          </div>
+        </section>
 
         {/* 6. Misc (Contact) Section */}
-        < section id="contact" className="py-40 container mx-auto px-6" >
+        <section id="contact" className="py-40 container mx-auto px-6">
           <Card className="bg-gradient-to-br from-violet-600/10 to-pink-600/10 border-violet-500/20 py-24 text-center">
             <motion.h2
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              className="text-5xl md:text-7xl font-black mb-8"
+              className="text-6xl xl:text-8xl font-black mb-8 leading-tight tracking-tighter"
+              style={{ fontFamily: 'var(--font-space-grotesk)' }}
             >
               Let&apos;s build <br />
               <span className="gradient-text">something great.</span>
@@ -476,7 +755,7 @@ export default function Home() {
               </div>
             </div>
           </Card>
-        </section >
+        </section>
 
         {/* Email Modal */}
         <AnimatePresence>
@@ -493,7 +772,7 @@ export default function Home() {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-2xl glass-card p-8 md:p-12 border-violet-500/30"
+                className="relative w-full max-w-2xl glass-card p-8 xl:p-12 border-violet-500/30"
               >
                 <button
                   onClick={() => setIsEmailModalOpen(false)}
@@ -502,7 +781,7 @@ export default function Home() {
                   <X size={28} />
                 </button>
 
-                <h3 className="text-3xl md:text-4xl font-black mb-3 gradient-text">
+                <h3 className="text-3xl xl:text-4xl font-black mb-3 gradient-text">
                   Get In Touch
                 </h3>
                 <p className="text-white/60 mb-8">
@@ -510,7 +789,7 @@ export default function Home() {
                 </p>
 
                 <form onSubmit={handleEmailSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-bold text-white/80 mb-2">
                         이름 *
@@ -567,17 +846,37 @@ export default function Home() {
                     />
                   </div>
 
-                  <div className="flex gap-4 pt-4">
+                  <div className="flex flex-col gap-4 pt-4">
                     <button
                       type="submit"
-                      className="flex-1 px-8 py-4 rounded-full bg-gradient-to-r from-violet-600 to-pink-600 text-white font-bold hover:shadow-lg hover:shadow-violet-600/50 transition-all"
+                      disabled={isSubmitting || submissionStatus === 'success'}
+                      className={cn(
+                        "flex-1 px-8 py-4 rounded-full font-bold transition-all flex items-center justify-center gap-2",
+                        submissionStatus === 'success'
+                          ? "bg-green-500 text-white"
+                          : "bg-gradient-to-r from-violet-600 to-pink-600 text-white hover:shadow-lg hover:shadow-violet-600/50"
+                      )}
                     >
-                      이메일 보내기
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          보내는 중...
+                        </>
+                      ) : submissionStatus === 'success' ? (
+                        "전송 완료!"
+                      ) : (
+                        "이메일 보내기"
+                      )}
                     </button>
+                    {submissionStatus === 'error' && (
+                      <p className="text-pink-500 text-sm text-center">
+                        전송에 실패했습니다. 다시 시도해 주세요.
+                      </p>
+                    )}
                     <button
                       type="button"
                       onClick={() => setIsEmailModalOpen(false)}
-                      className="px-8 py-4 rounded-full border border-white/10 bg-white/5 font-bold hover:bg-white/10 transition-all"
+                      className="px-8 py-4 rounded-full border border-white/10 bg-white/5 font-bold hover:bg-white/10 transition-all text-white/60"
                     >
                       취소
                     </button>
@@ -587,11 +886,11 @@ export default function Home() {
             </motion.div>
           )}
         </AnimatePresence>
-      </main >
+      </main>
 
       <footer className="py-12 border-t border-white/10 text-center text-white/30 text-sm">
         <p>© 2026 Developer Portfolio. Built with Next.js & Framer Motion.</p>
       </footer>
-    </div >
+    </div>
   );
 }
