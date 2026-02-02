@@ -146,7 +146,22 @@ const Card = ({ children, className }: { children: React.ReactNode, className?: 
 
 // --- Constants ---
 
-const projects = [
+interface Project {
+  title: string;
+  period: string;
+  overview: string;
+  programs: string;
+  contents: string;
+  contribution: string;
+  description: string;
+  tech: string[];
+  github: string;
+  link: string;
+  image: React.ReactNode;
+  color: string;
+}
+
+const projects: Project[] = [
   {
     title: "MovieFlix",
     period: "2025.11.14 - 2025.12.05",
@@ -556,7 +571,7 @@ export default function Home() {
           <SectionTitle align="center" subtitle="선택된 프로젝트들">Selected Works</SectionTitle>
 
           <div className="space-y-40 mt-20">
-            {projects.map((project: any, index: number) => (
+            {projects.map((project, index) => (
               <motion.div
                 key={project.title}
                 initial={{ opacity: 0, y: 50 }}
