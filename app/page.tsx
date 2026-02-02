@@ -599,7 +599,6 @@ export default function Home() {
                         <p className="text-white/90 font-bold">{project.contribution}</p>
                       </div>
                     </div>
-
                     <div className="pt-8 space-y-6">
                       <p className="text-white/80 leading-loose">
                         {project.description}
