@@ -1,28 +1,28 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-// Initialize Resend with the API key from environment variables
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(req: Request) {
-    try {
-        const { name, email, subject, message } = await req.json();
+  try {
+    // Initialize Resend inside the handler to avoid build-time failures
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-        // Validate the incoming data
-        if (!name || !email || !subject || !message) {
-            return NextResponse.json(
-                { error: '모든 필드를 입력해 주세요.' },
-                { status: 400 }
-            );
-        }
+    const { name, email, subject, message } = await req.json();
 
-        // Send the email using Resend
-        const data = await resend.emails.send({
-            from: 'Portfolio Contact <onboarding@resend.dev>', // Resend default for unverified domains
-            to: ['ap9450150918@gmail.com'],
-            subject: `[Portfolio Contact] ${subject}`,
-            replyTo: email,
-            html: `
+    // Validate the incoming data
+    if (!name || !email || !subject || !message) {
+      return NextResponse.json(
+        { error: '모든 필드를 입력해 주세요.' },
+        { status: 400 }
+      );
+    }
+
+    // Send the email using Resend
+    const data = await resend.emails.send({
+      from: 'Portfolio Contact <onboarding@resend.dev>', // Resend default for unverified domains
+      to: ['ap9450150918@gmail.com'],
+      subject: `[Portfolio Contact] ${subject}`,
+      replyTo: email,
+      html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
           <h2 style="color: #8b5cf6;">새로운 문의가 도착했습니다!</h2>
           <p><strong>보낸 사람:</strong> ${name} (${email})</p>
@@ -37,14 +37,14 @@ export async function POST(req: Request) {
           <p style="font-size: 12px; color: #666;">박은별 포트폴리오 웹사이트를 통해 전송된 메일입니다.</p>
         </div>
       `,
-        });
+    });
 
-        return NextResponse.json({ success: true, data });
-    } catch (error: any) {
-        console.error('Email send error:', error);
-        return NextResponse.json(
-            { error: '이메일 전송에 실패했습니다. 다시 시도해 주세요.' },
-            { status: 500 }
-        );
-    }
+    return NextResponse.json({ success: true, data });
+  } catch (error: any) {
+    console.error('Email send error:', error);
+    return NextResponse.json(
+      { error: '이메일 전송에 실패했습니다. 다시 시도해 주세요.' },
+      { status: 500 }
+    );
+  }
 }
